@@ -12,18 +12,21 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "freeciv";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${builtins.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "1b3q5k9wpv7z24svz01ybw8d8wlzkkdr6ia5hgp6cxk6vq67n67s";
+    sha256 = "197cjkb77b9phd3wlpqkakpmf2y1ixc6pj8w6d3zz22r4c8n1r0f";
   };
 
   postPatch = ''
     for f in {common,utility}/*.py; do
       substituteInPlace $f \
+        --replace '/usr/bin/env python3' ${python.interpreter}
+      
+		substituteInPlace $f \
         --replace '/usr/bin/env python' ${python.interpreter}
     done
   '';
